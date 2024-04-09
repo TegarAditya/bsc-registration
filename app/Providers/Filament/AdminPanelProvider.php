@@ -28,7 +28,6 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('BSC Admin')
             ->login()
-            ->registration()
             ->passwordReset()
             ->emailVerification()
             ->sidebarCollapsibleOnDesktop()
