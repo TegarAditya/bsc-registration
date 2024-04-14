@@ -1,6 +1,10 @@
 <?php
 
+use App\Models\City;
+use App\Models\District;
+use App\Models\Province;
 use App\Models\User;
+use App\Models\Village;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,13 +20,15 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->string('phone_number')->unique();
+            $table->string('companion_phone_number')->nullable();
             $table->string('school')->nullable();
             $table->string('grade')->nullable();
+            $table->string('type')->nullable();
             $table->string('address')->nullable();
-            $table->foreignId('province_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('city_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('district_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('village_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Province::class)->constrained()->cascadeOnDelete();
+            $table->foreignId(City::class)->constrained()->cascadeOnDelete();
+            $table->foreignId(District::class)->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignId(Village::class)->constrained()->cascadeOnDelete()->nullable();
             $table->string('postal_code')->nullable();
             $table->timestamps();
         });
