@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use App\Filament\Participant\Pages\Auth\Register;
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -33,6 +34,7 @@ class ParticipantPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->sidebarFullyCollapsibleOnDesktop()
+            ->defaultThemeMode(ThemeMode::Light)
             ->brandLogo(asset('assets/images/logo.png'))
             ->brandLogoHeight('100px')
             ->defaultAvatarProvider(BoringAvatarsProvider::class)
