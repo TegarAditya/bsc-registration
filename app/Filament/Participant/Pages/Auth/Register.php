@@ -5,7 +5,10 @@ namespace App\Filament\Participant\Pages\Auth;
 use App\Models\City;
 use App\Models\Province;
 use App\Models\User;
+use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Actions\Action;
+use Filament\Events\Auth\Registered;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
@@ -13,8 +16,11 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\FormsComponent;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
+use Filament\Notifications\Notification;
 use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 
 class Register extends BaseRegister
@@ -64,9 +70,11 @@ class Register extends BaseRegister
                                                 ->required()
                                                 ->columnSpanFull(),
                                             Forms\Components\TextInput::make('school')
-                                                ->label('Sekolah asal'),
+                                                ->label('Sekolah asal')
+                                                ->required(),
                                             Forms\Components\Select::make('grade')
                                                 ->label('Jenjang saat ini')
+                                                ->required()
                                                 ->options([
                                                     'SD' => 'SD',
                                                     'SMP' => 'SMP',
@@ -86,13 +94,14 @@ class Register extends BaseRegister
                                                 }),
                                             Forms\Components\Select::make('province_id')
                                                 ->label('Provinsi')
+                                                ->required()
                                                 ->options(fn (Province $province) => $province->all()->pluck('name', 'id')->toArray())
                                                 ->searchable()
                                                 ->live(),
                                             Forms\Components\Select::make('regency_id')
                                                 ->label('Kabupaten/Kota')
+                                                ->required()
                                                 ->options(fn ($get) => $get('province_id') ? City::where('province_id', $get('province_id'))->orderBy('name', 'asc')->pluck('name', 'id')->toArray() : [])
-                                                // ->searchable()
                                                 ->disabled(fn ($get) => $get('province_id') === null),
                                             Forms\Components\Textarea::make('address')
                                                 ->label('Alamat (opsional)')
@@ -102,7 +111,7 @@ class Register extends BaseRegister
                             Wizard\Step::make('Data Lomba')
                                 ->icon('heroicon-o-academic-cap')
                                 ->schema([
-                                    Fieldset::make('Data Lomba')
+                                    Fieldset::make('userDetail')
                                         ->hiddenLabel()
                                         ->model($this->getUserModel())
                                         ->relationship('userDetail')
@@ -171,6 +180,7 @@ class Register extends BaseRegister
         return Forms\Components\TextInput::make('email')
             ->label(__('filament-panels::pages/auth/register.form.email.label'))
             ->email()
+            ->required()
             ->live()
             ->maxLength(255)
             ->unique($this->getUserModel());
@@ -210,14 +220,62 @@ class Register extends BaseRegister
             ->submit('register');
     }
 
-    protected function beforCreate(): void
+    public function register(): ?RegistrationResponse
     {
-        dd($this->userModel);
-        $this->halt();
+        try {
+            $this->rateLimit(2);
+        } catch (TooManyRequestsException $exception) {
+            Notification::make()
+                ->title(__('filament-panels::pages/auth/register.notifications.throttled.title', [
+                    'seconds' => $exception->secondsUntilAvailable,
+                    'minutes' => ceil($exception->secondsUntilAvailable / 60),
+                ]))
+                ->body(array_key_exists('body', __('filament-panels::pages/auth/register.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/register.notifications.throttled.body', [
+                    'seconds' => $exception->secondsUntilAvailable,
+                    'minutes' => ceil($exception->secondsUntilAvailable / 60),
+                ]) : null)
+                ->danger()
+                ->send();
+
+            return null;
+        }
+
+        $user = $this->wrapInDatabaseTransaction(function () {
+            $this->callHook('beforeValidate');
+
+            $data = $this->form->getState();
+
+            $this->callHook('afterValidate');
+
+            $data = $this->mutateFormDataBeforeRegister($data);
+
+            $this->callHook('beforeRegister');
+
+            $user = $this->handleRegistration($data);
+
+            $this->form->model($user)->saveRelationships();
+
+            $this->callHook('afterRegister');
+
+            return $user;
+        });
+
+        event(new Registered($user));
+
+        $this->sendEmailVerificationNotification($user);
+
+        Filament::auth()->login($user);
+
+        session()->regenerate();
+
+        return app(RegistrationResponse::class);
     }
 
-    // protected function afterCreate(): void
-    // {
-    //     dd($this->userModel);
-    // }
+    protected function handleRegistration(array $data): Model
+    {
+        $user = $this->getUserModel()::create($data);
+        $user->assignRole('participant');
+
+        return $user;
+    }
 }
