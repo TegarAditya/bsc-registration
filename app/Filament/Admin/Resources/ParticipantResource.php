@@ -20,7 +20,11 @@ class ParticipantResource extends Resource
 {
     protected static ?string $model = User::class;
 
+    protected static ?string $navigationGroup = 'Data Peserta';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationLabel = 'Daftar Peserta';
 
     protected static ?string $modelLabel = 'Peserta';
 

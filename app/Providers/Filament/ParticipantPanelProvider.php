@@ -4,6 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use App\Filament\Participant\Pages\Auth\Register;
+use App\Filament\Participant\Widgets\CountdownWidget;
+use App\Filament\Participant\Widgets\ParticipantWidget;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -33,7 +35,7 @@ class ParticipantPanelProvider extends PanelProvider
             ->profile(isSimple: false)
             ->passwordReset()
             ->emailVerification()
-            ->sidebarFullyCollapsibleOnDesktop()
+            ->topNavigation()
             ->defaultThemeMode(ThemeMode::Light)
             ->brandLogo(asset('assets/images/logo.png'))
             ->brandLogoHeight('100px')
@@ -50,7 +52,7 @@ class ParticipantPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Participant/Widgets'), for: 'App\\Filament\\Participant\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
+                Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

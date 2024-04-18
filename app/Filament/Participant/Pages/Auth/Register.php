@@ -2,6 +2,8 @@
 
 namespace App\Filament\Participant\Pages\Auth;
 
+use App\Models\City;
+use App\Models\Province;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Wizard;
@@ -38,13 +40,14 @@ class Register extends BaseRegister
                                     $this->getEmailFormComponent(),
                                     $this->getPasswordFormComponent(),
                                     $this->getPasswordConfirmationFormComponent(),
+                                    $this->getCredentialAdviceComponent(),
                                 ]),
                             Wizard\Step::make('Data Diri')
                                 ->icon('heroicon-o-user-circle')
                                 ->schema([
                                     Fieldset::make('userDetail')
                                         ->hiddenLabel()
-                                        ->model(User::class)
+                                        ->model($this->getUserModel())
                                         ->relationship('userDetail')
                                         ->schema([
                                             Forms\Components\TextInput::make('phone_number')
@@ -52,11 +55,13 @@ class Register extends BaseRegister
                                                 ->helperText('Nomor telepon pribadi yang dapat dihubungi')
                                                 ->tel()
                                                 ->unique()
+                                                ->required(fn ($get) => $get('../email') == null)
                                                 ->columnSpanFull(),
                                             Forms\Components\TextInput::make('companion_phone_number')
                                                 ->label('Nomor telepon pendamping')
                                                 ->helperText('Nomor telepon pendamping atau guru yang dapat dihubungi')
                                                 ->tel()
+                                                ->required()
                                                 ->columnSpanFull(),
                                             Forms\Components\TextInput::make('school')
                                                 ->label('Sekolah asal'),
@@ -81,17 +86,13 @@ class Register extends BaseRegister
                                                 }),
                                             Forms\Components\Select::make('province_id')
                                                 ->label('Provinsi')
-                                                ->relationship('province', 'name')
-                                                ->options([
-                                                    '1' => 'Aceh',
-                                                ])
+                                                ->options(fn (Province $province) => $province->all()->pluck('name', 'id')->toArray())
                                                 ->searchable()
                                                 ->live(),
                                             Forms\Components\Select::make('regency_id')
                                                 ->label('Kabupaten/Kota')
-                                                ->options([
-                                                    '1' => 'Aceh Barat',
-                                                ])
+                                                ->options(fn ($get) => $get('province_id') ? City::where('province_id', $get('province_id'))->orderBy('name', 'asc')->pluck('name', 'id')->toArray() : [])
+                                                // ->searchable()
                                                 ->disabled(fn ($get) => $get('province_id') === null),
                                             Forms\Components\Textarea::make('address')
                                                 ->label('Alamat (opsional)')
@@ -103,7 +104,7 @@ class Register extends BaseRegister
                                 ->schema([
                                     Fieldset::make('Data Lomba')
                                         ->hiddenLabel()
-                                        ->model(User::class)
+                                        ->model($this->getUserModel())
                                         ->relationship('userDetail')
                                         ->schema([
                                             Forms\Components\Select::make('type')
@@ -170,6 +171,7 @@ class Register extends BaseRegister
         return Forms\Components\TextInput::make('email')
             ->label(__('filament-panels::pages/auth/register.form.email.label'))
             ->email()
+            ->live()
             ->maxLength(255)
             ->unique($this->getUserModel());
     }
@@ -181,6 +183,16 @@ class Register extends BaseRegister
             ->required()
             ->maxLength(255)
             ->unique($this->getUserModel());
+    }
+
+    protected function getCredentialAdviceComponent(): Component
+    {
+        return Forms\Components\Placeholder::make('credentialAdvice')
+            ->hiddenLabel()
+            ->content(
+                '*Data akun akan digunakan untuk pengerjaan simulasi dan pengerjaan lomba. Mohon mengingat data akun Anda dengan baik atau simpan di tempat yang aman.'
+            )
+            ->columnSpanFull();
     }
 
     public function getRegisterFormAction(): Action
@@ -195,7 +207,17 @@ class Register extends BaseRegister
     {
         return Action::make('register')
             ->label(__('filament-panels::pages/auth/register.form.actions.register.label'))
-            ->submit('register')
-            ->disabled();
+            ->submit('register');
     }
+
+    protected function beforCreate(): void
+    {
+        dd($this->userModel);
+        $this->halt();
+    }
+
+    // protected function afterCreate(): void
+    // {
+    //     dd($this->userModel);
+    // }
 }
