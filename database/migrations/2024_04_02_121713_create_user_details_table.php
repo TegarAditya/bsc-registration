@@ -26,9 +26,9 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->string('address')->nullable();
             $table->foreignIdFor(Province::class)->constrained()->cascadeOnDelete();
-            $table->foreignId(City::class)->constrained()->cascadeOnDelete();
-            $table->foreignId(District::class)->constrained()->cascadeOnDelete()->nullable();
-            $table->foreignId(Village::class)->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignIdFor(City::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(District::class)->constrained()->cascadeOnDelete()->nullable();
+            $table->foreignIdFor(Village::class)->constrained()->cascadeOnDelete()->nullable();
             $table->string('postal_code')->nullable();
             $table->timestamps();
         });
