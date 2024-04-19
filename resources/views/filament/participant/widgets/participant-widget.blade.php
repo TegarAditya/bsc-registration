@@ -13,11 +13,11 @@
         <br class="my-2">
         <div>
             @if ($this->getUserStatus())
-                <x-filament::button href="{{ $this->getGroupLink() }}" tag="a">
+                <x-filament::button icon="heroicon-o-chat-bubble-left-right" href="{{ $this->getGroupLink() }}" tag="a">
                     Group WhatsApp
                 </x-filament::button>
             @else
-                <x-filament::button href="{{ $this->getProfileLink() }}" tag="a">
+                <x-filament::button icon="heroicon-o-arrow-right" href="{{ $this->getProfileLink() }}" tag="a">
                     Lengkapi Data Diri
                 </x-filament::button>
             @endif
