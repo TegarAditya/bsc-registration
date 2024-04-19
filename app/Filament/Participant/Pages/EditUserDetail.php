@@ -31,37 +31,37 @@ class EditUserDetail extends Page implements HasForms
 
     public function mount(): void 
     {
-        $this->form->fill(auth()->user()->userDetail->attributesToArray());
+        $this->form->fill(auth()->user()->attributesToArray());
     }
  
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                // Forms\Components\Section::make('Buat Akun')
-                //     ->icon('heroicon-o-user')
-                //     ->schema([
-                //         Forms\Components\TextInput::make('user.name')
-                //             ->label('Nama Lengkap')
-                //             ->required()
-                //             ->autocomplete(false)
-                //             ->columnSpanFull(),
-                //         Forms\Components\TextInput::make('user.email')
-                //             ->label('Email')
-                //             ->unique()
-                //             ->email()
-                //             ->autocomplete(false)
-                //             ->required()
-                //             ->columnSpanFull(),
-                //         Forms\Components\TextInput::make('user.password')
-                //             ->label('Password')
-                //             ->password()
-                //             ->autocomplete(false)
-                //             ->revealable(filament()->arePasswordsRevealable())
-                //             ->rule(Password::default())
-                //             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                //             ->columnSpanFull(),
-                //     ]),
+                Forms\Components\Section::make('Buat Akun')
+                    ->icon('heroicon-o-user')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nama Lengkap')
+                            ->required()
+                            ->autocomplete(false)
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Email')
+                            ->unique(ignoreRecord: true)
+                            ->email()
+                            ->autocomplete(false)
+                            ->required()
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('password')
+                            ->label('Password')
+                            ->password()
+                            ->autocomplete(false)
+                            ->revealable(filament()->arePasswordsRevealable())
+                            ->rule(Password::default())
+                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                            ->columnSpanFull(),
+                    ]),
                 Forms\Components\Section::make('Data Diri')
                     ->icon('heroicon-o-user-circle')
                     ->schema([

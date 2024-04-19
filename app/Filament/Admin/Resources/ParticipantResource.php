@@ -49,7 +49,7 @@ class ParticipantResource extends Resource
                             ->columnSpanFull(),
                         Forms\Components\TextInput::make('email')
                             ->label('Email')
-                            ->unique()
+                            ->unique(ignoreRecord: true)
                             ->email()
                             ->required()
                             ->columnSpanFull(),
@@ -149,6 +149,7 @@ class ParticipantResource extends Resource
                             ]),
                     ]),
                 Forms\Components\Section::make('Syarat dan Ketentuan')
+                    ->visibleOn(['create'])
                     ->icon('heroicon-o-shield-check')
                     ->schema([
                         Forms\Components\Placeholder::make('placeholder')
