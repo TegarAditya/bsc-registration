@@ -13,6 +13,7 @@ use Filament\Forms\Components\Wizard;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Group;
 use Filament\Forms\FormsComponent;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -53,14 +54,12 @@ class Register extends BaseRegister
                                 ->schema([
                                     Fieldset::make('userDetail')
                                         ->hiddenLabel()
-                                        ->model($this->getUserModel())
-                                        ->relationship('userDetail')
+                                        ->relationship(name: 'userDetail')
                                         ->schema([
                                             Forms\Components\TextInput::make('phone_number')
                                                 ->label('Nomor telepon')
-                                                ->helperText('Nomor telepon pribadi yang dapat dihubungi')
+                                                ->helperText('Nomor telepon pribadi yang dapat dihubungi. Usahakan tidak sama antar peserta.')
                                                 ->tel()
-                                                ->unique()
                                                 ->required(fn ($get) => $get('../email') == null)
                                                 ->columnSpanFull(),
                                             Forms\Components\TextInput::make('companion_phone_number')
@@ -98,7 +97,7 @@ class Register extends BaseRegister
                                                 ->options(fn (Province $province) => $province->all()->pluck('name', 'id')->toArray())
                                                 ->searchable()
                                                 ->live(),
-                                            Forms\Components\Select::make('regency_id')
+                                            Forms\Components\Select::make('city_id')
                                                 ->label('Kabupaten/Kota')
                                                 ->required()
                                                 ->options(fn ($get) => $get('province_id') ? City::where('province_id', $get('province_id'))->orderBy('name', 'asc')->pluck('name', 'id')->toArray() : [])
@@ -113,30 +112,30 @@ class Register extends BaseRegister
                                 ->schema([
                                     Fieldset::make('userDetail')
                                         ->hiddenLabel()
-                                        ->model($this->getUserModel())
-                                        ->relationship('userDetail')
+                                        ->relationship(name: 'userDetail')
                                         ->schema([
                                             Forms\Components\Select::make('type')
                                                 ->label('Jenis Lomba')
-                                                ->helperText('Pilih jenis lomba yang akan anda ikuti. Peserta hanya dapat mengikuti satu jenis lomba.')
+                                                ->helperText(fn () => new HtmlString('Pilih jenis lomba yang akan anda ikuti. Peserta hanya dapat mengikuti satu jenis lomba. <br><br> <strong>*Hanya peserta MI, MTs, dan MA yang dapat memilih jenis lomba BSC Madrasah (KSM).</strong>'))
                                                 ->options(function (Get $get) {
                                                     $grade = $get('grade');
 
                                                     if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
                                                         return [
-                                                            'KSN' => 'BSC Umum (KSN)',
+                                                            'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
                                                         ];
                                                     }
 
                                                     if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
                                                         return [
-                                                            'KSN' => 'BSC Umum (KSN)',
-                                                            'KSM' => 'BSC Madrasah (KSM)',
+                                                            'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
+                                                            'KSM' => 'BSC Madrasah (Kompetisi Sains Madrasah)',
                                                         ];
                                                     }
 
                                                     return [];
                                                 })
+                                                ->selectablePlaceholder(fn ($get) => in_array($get('grade'), ['MI', 'MTs', 'MA']) ? true : false)
                                                 ->required()
                                                 ->columnSpanFull(),
                                         ]),
@@ -170,7 +169,8 @@ class Register extends BaseRegister
                         ])
                             ->submitAction($this->getCustomRegisterFormAction()),
                     ])
-                    ->statePath('data'),
+                    ->statePath('data')
+                    ->model(User::class),
             ),
         ];
     }
