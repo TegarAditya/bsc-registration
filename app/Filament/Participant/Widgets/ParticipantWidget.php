@@ -2,6 +2,7 @@
 
 namespace App\Filament\Participant\Widgets;
 
+use App\Models\User;
 use Filament\Widgets\Widget;
 
 class ParticipantWidget extends Widget
@@ -11,6 +12,17 @@ class ParticipantWidget extends Widget
     public function getColumnSpan(): int|string|array
     {
         return 'full';
+    }
+
+    public function getUserStatus(): bool
+    {
+        $data = User::find(auth()->user()->id)->userDetail;
+
+        if ($data == null) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getGroupLink(): string
@@ -24,5 +36,10 @@ class ParticipantWidget extends Widget
         }
 
         return false;
+    }
+
+    public function getProfileLink(): string
+    {
+        return url('/edit-user-detail');
     }
 }
