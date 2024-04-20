@@ -40,4 +40,24 @@ class City extends Model
     {
         return $this->hasManyThrough(Village::class, District::class);
     }
+
+    /**
+     * Get the users associated with the city.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function users()
+    {
+        return $this->hasManyThrough(UserDetail::class, User::class);
+    }
+
+    /**
+     * Get the user details associated with the city.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userDetails()
+    {
+        return $this->hasMany(UserDetail::class);
+    }
 }

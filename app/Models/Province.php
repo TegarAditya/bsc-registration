@@ -40,4 +40,14 @@ class Province extends Model
     {
         return $this->hasManyThrough(Village::class, District::class);
     }
+
+    /**
+     * Get the userDetails associated with the province.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userDetails()
+    {
+        return $this->hasMany(UserDetail::class);
+    }
 }

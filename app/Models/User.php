@@ -61,6 +61,16 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
+     * Get the city that the user belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
      * Determine if the user can access the given panel.
      *
      * @param  \Filament\Panel  $panel
