@@ -3,6 +3,8 @@
 namespace App\Filament\Admin\Resources\ParticipantResource\Pages;
 
 use App\Filament\Admin\Resources\ParticipantResource;
+use App\Filament\Admin\Resources\ParticipantResource\Widgets\ParticipantRegistrationChart;
+use App\Filament\Admin\Resources\ParticipantResource\Widgets\ParticipantStatsOverview;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -14,6 +16,14 @@ class ListParticipants extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            ParticipantStatsOverview::make(),
+            ParticipantRegistrationChart::make(),
         ];
     }
 }
