@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
+use stdClass;
 
 class ParticipantResource extends Resource
 {
@@ -182,6 +183,9 @@ class ParticipantResource extends Resource
         return $table
             ->query(fn () => parent::getEloquentQuery()->whereHas('userDetail')->orWhereHas('roles', fn (Builder $query) => $query->where('name', 'participant')))
             ->columns([
+                Tables\Columns\TextColumn::make('number')
+                    ->label('No.')
+                    ->default(fn (stdClass $rowLoop) => $rowLoop->index + 1 . '.'),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Lengkap')
                     ->searchable()
