@@ -3,7 +3,7 @@
         <div>
             <h1 class="text-xl font-semibold">Pendaftaran Berhasil</h1>
             <hr class="my-2">
-            <p class="text-sm">Selamat, Anda telah menjadi peserta Bupin Science Comptetition 2024.</p>
+            <p class="text-sm">Selamat, Anda telah menjadi peserta Bupin Science Competition 2024.</p>
             @if ($this->getUserStatus())
                 <p class="font-semibold text-sm">Silahkan bergabung ke grup WhatsApp dibawah ini.</p>
             @else
