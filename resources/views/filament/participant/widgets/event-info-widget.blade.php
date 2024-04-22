@@ -2,55 +2,32 @@
     <x-filament::section>
         <div class="flex items-center gap-x-3">
             <div class="flex-1">
-                <a
-                    href="{{ url('/') }}"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                >
-                    <img
-                        style="height: 4rem"
-                        alt="Bupin Science Competition"
-                        src="{{ asset('assets/images/logo-sm.png') }}"
-                    />
+                <a href="{{ url('/') }}" rel="noopener noreferrer" target="_blank">
+                    <img style="max-height: 2.75rem;" alt="Bupin Science Competition"
+                        src="{{ asset('assets/images/logo-sm.png') }}" />
+                </a>
             </div>
 
             <div class="flex flex-col items-end gap-y-1">
-                <x-filament::link
-                    color="gray"
-                    href="https://s.bupin.id/JuknisBsc"
-                    icon="heroicon-m-book-open"
-                    icon-alias="panels::widgets.filament-info.open-documentation-button"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                >
+                <x-filament::link color="gray" href="https://s.bupin.id/JuknisBsc" icon="heroicon-m-book-open"
+                    icon-alias="panels::widgets.filament-info.open-documentation-button" rel="noopener noreferrer"
+                    target="_blank">
                     Juknis BSC
                 </x-filament::link>
 
-                <x-filament::link
-                    color="gray"
-                    href="#"
-                    icon-alias="panels::widgets.filament-info.open-github-button"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                >
+                <x-filament::link color="gray" href="https://wa.me/6282118007474"
+                    icon-alias="DIGI Bupin WhatsApp" rel="noopener noreferrer"
+                    target="_blank">
                     <x-slot name="icon">
-                        <svg
-                            viewBox="0 0 98 96"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                clip-rule="evenodd"
-                                fill="currentColor"
-                                fill-rule="evenodd"
-                                d="M48.854 0C21.839 0 0 22 0 49.217c0 21.756 13.993 40.172 33.405 46.69 2.427.49 3.316-1.059 3.316-2.362 0-1.141-.08-5.052-.08-9.127-13.59 2.934-16.42-5.867-16.42-5.867-2.184-5.704-5.42-7.17-5.42-7.17-4.448-3.015.324-3.015.324-3.015 4.934.326 7.523 5.052 7.523 5.052 4.367 7.496 11.404 5.378 14.235 4.074.404-3.178 1.699-5.378 3.074-6.6-10.839-1.141-22.243-5.378-22.243-24.283 0-5.378 1.94-9.778 5.014-13.2-.485-1.222-2.184-6.275.486-13.038 0 0 4.125-1.304 13.426 5.052a46.97 46.97 0 0 1 12.214-1.63c4.125 0 8.33.571 12.213 1.63 9.302-6.356 13.427-5.052 13.427-5.052 2.67 6.763.97 11.816.485 13.038 3.155 3.422 5.015 7.822 5.015 13.2 0 18.905-11.404 23.06-22.324 24.283 1.78 1.548 3.316 4.481 3.316 9.126 0 6.6-.08 11.897-.08 13.526 0 1.304.89 2.853 3.316 2.364 19.412-6.52 33.405-24.935 33.405-46.691C97.707 22 75.788 0 48.854 0z"
-                            />
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 30 30">
+                            <path clip-rule="evenodd" fill="currentColor" fill-rule="evenodd"
+                                d="M 15 3 C 8.373 3 3 8.373 3 15 C 3 17.251208 3.6323415 19.350068 4.7109375 21.150391 L 3.1074219 27 L 9.0820312 25.431641 C 10.829354 26.425062 12.84649 27 15 27 C 21.627 27 27 21.627 27 15 C 27 8.373 21.627 3 15 3 z M 10.892578 9.4023438 C 11.087578 9.4023438 11.287937 9.4011562 11.460938 9.4101562 C 11.674938 9.4151563 11.907859 9.4308281 12.130859 9.9238281 C 12.395859 10.509828 12.972875 11.979906 13.046875 12.128906 C 13.120875 12.277906 13.173313 12.453437 13.070312 12.648438 C 12.972312 12.848437 12.921344 12.969484 12.777344 13.146484 C 12.628344 13.318484 12.465078 13.532109 12.330078 13.662109 C 12.181078 13.811109 12.027219 13.974484 12.199219 14.271484 C 12.371219 14.568484 12.968563 15.542125 13.851562 16.328125 C 14.986562 17.342125 15.944188 17.653734 16.242188 17.802734 C 16.540187 17.951734 16.712766 17.928516 16.884766 17.728516 C 17.061766 17.533516 17.628125 16.864406 17.828125 16.566406 C 18.023125 16.268406 18.222188 16.319969 18.492188 16.417969 C 18.766188 16.515969 20.227391 17.235766 20.525391 17.384766 C 20.823391 17.533766 21.01875 17.607516 21.09375 17.728516 C 21.17075 17.853516 21.170828 18.448578 20.923828 19.142578 C 20.676828 19.835578 19.463922 20.505734 18.919922 20.552734 C 18.370922 20.603734 17.858562 20.7995 15.351562 19.8125 C 12.327563 18.6215 10.420484 15.524219 10.271484 15.324219 C 10.122484 15.129219 9.0605469 13.713906 9.0605469 12.253906 C 9.0605469 10.788906 9.8286563 10.071437 10.097656 9.7734375 C 10.371656 9.4754375 10.692578 9.4023438 10.892578 9.4023438 z">
+                            </path>
                         </svg>
                     </x-slot>
-
-                    {{ __('filament-panels::widgets/filament-info-widget.actions.open_github.label') }}
+                    Hubungi Kami
                 </x-filament::link>
             </div>
         </div>
     </x-filament::section>
 </x-filament-widgets::widget>
-
