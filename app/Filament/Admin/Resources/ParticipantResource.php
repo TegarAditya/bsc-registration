@@ -110,7 +110,6 @@ class ParticipantResource extends Resource
                                 Forms\Components\Select::make('city_id')
                                     ->label('Kabupaten/Kota')
                                     ->options(fn ($get) => $get('province_id') ? City::where('province_id', $get('province_id'))->orderBy('name', 'asc')->pluck('name', 'id')->toArray() : [])
-                                    // ->searchable()
                                     ->disabled(fn ($get) => $get('province_id') === null),
                                 Forms\Components\Textarea::make('address')
                                     ->label('Alamat (opsional)')
