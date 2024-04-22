@@ -3,6 +3,7 @@
 namespace App\Filament\Participant\Widgets;
 
 use App\Models\User;
+use Auth;
 use Filament\Widgets\Widget;
 
 class ParticipantWidget extends Widget
@@ -41,5 +42,10 @@ class ParticipantWidget extends Widget
     public function getProfileLink(): string
     {
         return url('/edit-user-detail');
+    }
+
+    public function isAdmin(): bool
+    {
+        return Auth::user()->hasRole('super_admin');
     }
 }
