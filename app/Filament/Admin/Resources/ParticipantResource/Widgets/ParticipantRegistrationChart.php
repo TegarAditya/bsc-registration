@@ -13,14 +13,14 @@ class ParticipantRegistrationChart extends ChartWidget
 
     protected static ?string $maxHeight = '300px';
 
-    protected int | string | array $columnSpan = 'full';
+    // protected int | string | array $columnSpan = 'full';
 
     protected function getData(): array
     {
         $data = Trend::query(User::whereHas('roles', fn ($query) => $query->where('name', 'participant'))->orWhereHas('userDetail'))
             ->between(
-                start: now()->startOfWeek(),
-                end: now()->endOfWeek(),
+                start: now()->parse('2024-04-18'),
+                end: now()->parse('2024-04-29'),
             )
             ->perDay()
             ->count();
@@ -28,11 +28,13 @@ class ParticipantRegistrationChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Pendaftaran',
+                    'label' => 'Pendaftar Baru',
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                    'fill' => true,
+                    'tension' => 0.4,
                 ],
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
+            'labels' => $data->map(fn (TrendValue $value) => substr($value->date, -2)),
         ];
     }
 
