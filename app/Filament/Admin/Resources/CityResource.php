@@ -7,6 +7,7 @@ use App\Filament\Admin\Resources\CityResource\RelationManagers;
 use App\Filament\Imports\CityImporter;
 use App\Models\City;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontFamily;
@@ -49,10 +50,6 @@ class CityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('province.name')
-                    ->label('Provinsi')
-                    ->searchable()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('code')
                     ->label('Kode Wilayah')
                     ->weight(FontWeight::SemiBold)
@@ -60,8 +57,16 @@ class CityResource extends Resource
                     ->size(TextColumnSize::Medium)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama')
+                    ->label('Kabupaten/Kota')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('province.name')
+                    ->label('Provinsi')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user_details_count')
+                    ->label('Jumlah Peserta')
+                    ->counts('userDetails')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -72,7 +77,18 @@ class CityResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('hasUserDetails')
+                    ->label('Memiliki Peserta')
+                    ->placeholder('Semua')
+                    ->options([
+                        'true' => 'Ya',
+                        'false' => 'Tidak',
+                    ])
+                    ->queries(
+                        true: fn (Builder $query) => $query->whereHas('userDetails'),
+                        false: fn (Builder $query) => $query->doesntHave('userDetails'),
+                        blank: fn (Builder $query) => $query,
+                    ),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
