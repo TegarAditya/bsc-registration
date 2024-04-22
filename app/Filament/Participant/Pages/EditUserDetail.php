@@ -5,6 +5,8 @@ namespace App\Filament\Participant\Pages;
 use App\Models\City;
 use App\Models\Province;
 use App\Models\User;
+use Auth;
+use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -27,13 +29,21 @@ class EditUserDetail extends Page implements HasForms
 
     protected static string $view = 'filament.participant.pages.edit-user-detail';
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            Action::make('Kembali')
+                ->url(url('/')),
+        ];
+    }
+
     public ?array $data = [];
 
-    public function mount(): void 
+    public function mount(): void
     {
-        $this->form->fill(auth()->user()->attributesToArray());
+        $this->form->fill(Auth::user()->attributesToArray());
     }
- 
+
     public function form(Form $form): Form
     {
         return $form
@@ -126,25 +136,26 @@ class EditUserDetail extends Page implements HasForms
                             ->schema([
                                 Forms\Components\Select::make('type')
                                     ->label('Jenis Lomba')
-                                    ->helperText('Pilih jenis lomba yang akan anda ikuti. Peserta hanya dapat mengikuti satu jenis lomba.')
+                                    ->helperText(fn () => new HtmlString('Pilih jenis lomba yang akan anda ikuti. Peserta hanya dapat mengikuti satu jenis lomba. <br><br> <strong>*Hanya peserta MI, MTs, dan MA yang dapat memilih jenis lomba BSC Madrasah (KSM).</strong>'))
                                     ->options(function (Get $get) {
                                         $grade = $get('grade');
 
                                         if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
                                             return [
-                                                'KSN' => 'BSC Umum (KSN)',
+                                                'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
                                             ];
                                         }
 
                                         if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
                                             return [
-                                                'KSN' => 'BSC Umum (KSN)',
-                                                'KSM' => 'BSC Madrasah (KSM)',
+                                                'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
+                                                'KSM' => 'BSC Madrasah (Kompetisi Sains Madrasah)',
                                             ];
                                         }
 
                                         return [];
                                     })
+                                    ->selectablePlaceholder(fn ($get) => in_array($get('grade'), ['MI', 'MTs', 'MA']) ? true : false)
                                     ->required()
                                     ->columnSpanFull(),
                             ]),
@@ -163,19 +174,29 @@ class EditUserDetail extends Page implements HasForms
         ];
     }
 
+    /**
+     * Saves the user detail form data.
+     *
+     * @return void
+     */
     public function save(): void
     {
         try {
             $data = $this->form->getState();
- 
+
             auth()->user()->userDetail->update($data);
         } catch (Halt $exception) {
             return;
         }
- 
-        Notification::make() 
+
+        Notification::make()
             ->success()
             ->title(__('filament-panels::resources/pages/edit-record.notifications.saved.title'))
-            ->send(); 
+            ->send();
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->hasRole('participant') || Auth::user()->has('userDetail');
     }
 }
