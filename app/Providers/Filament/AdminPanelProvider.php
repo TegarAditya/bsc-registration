@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Resources\ParticipantResource\Widgets\ParticipantGradeChart;
 use App\Filament\Admin\Resources\ParticipantResource\Widgets\ParticipantRegistrationChart;
 use App\Filament\Admin\Resources\ParticipantResource\Widgets\ParticipantStatsOverview;
 use App\Filament\Admin\Resources\ParticipantResource\Widgets\ParticipantTypeChart;
@@ -54,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
                 ParticipantStatsOverview::make(),
                 ParticipantRegistrationChart::make(),
                 ParticipantTypeChart::make(),
+                ParticipantGradeChart::make(),
             ])
             ->navigationGroups([
                 NavigationGroup::make()
