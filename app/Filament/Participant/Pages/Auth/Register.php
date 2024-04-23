@@ -128,14 +128,14 @@ class Register extends BaseRegister
 
                                                     if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
                                                         return [
-                                                            'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
+                                                            // 'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
                                                             'KSM' => 'BSC Madrasah (Kompetisi Sains Madrasah)',
                                                         ];
                                                     }
 
                                                     return [];
                                                 })
-                                                ->selectablePlaceholder(fn ($get) => in_array($get('grade'), ['MI', 'MTs', 'MA']) ? true : false)
+                                                ->selectablePlaceholder(fn ($get) => in_array($get('grade'), []) ? true : false)
                                                 ->required()
                                                 ->columnSpanFull(),
                                         ]),
