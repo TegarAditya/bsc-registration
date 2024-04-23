@@ -14,16 +14,25 @@ class ParticipantTypeChart extends ChartWidget
 
     protected function getData(): array
     {
+        $userDetails = UserDetail::all();
+
+        $groupedData = $userDetails->groupBy('type')->map(fn ($userDetail) => $userDetail->count());
+
+        $dataValues = $groupedData->values()->toArray();
+
+        $labels = $groupedData->keys()->toArray();
+
         return [
             'datasets' => [
                 [
                     'label' => 'Data',
-                    'data' => UserDetail::all()->groupBy('type')->map(fn ($userDetail) => $userDetail->count())->values()->toArray(),
+                    'data' => $dataValues,
                 ],
             ],
-            'labels' => UserDetail::select('type')->groupBy('type')->pluck('type')->toArray(),
-        ];        
+            'labels' => $labels,
+        ];
     }
+
 
     protected function getType(): string
     {
