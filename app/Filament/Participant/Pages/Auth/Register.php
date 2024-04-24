@@ -130,7 +130,7 @@ class Register extends BaseRegister
                                                         ];
                                                     }
                                                 })
-                                                ->selectablePlaceholder(fn ($get) => in_array($get('grade'), ['MI', 'MTs', 'MA']) ? true : false)
+                                                ->selectablePlaceholder(false)
                                                 ->required()
                                                 ->columnSpanFull(),
                                         ]),
