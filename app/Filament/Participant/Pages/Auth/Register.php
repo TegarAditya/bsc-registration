@@ -120,21 +120,17 @@ class Register extends BaseRegister
                                                 ->options(function (Get $get) {
                                                     $grade = $get('grade');
 
-                                                    if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
-                                                        return [
-                                                            'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
-                                                        ];
-                                                    }
-
                                                     if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
                                                         return [
                                                             'KSM' => 'BSC Madrasah (Kompetisi Sains Madrasah)',
                                                         ];
+                                                    } else {
+                                                        return [
+                                                            'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
+                                                        ];
                                                     }
-
-                                                    return [];
                                                 })
-                                                ->selectablePlaceholder(false)
+                                                ->selectablePlaceholder(fn ($get) => in_array($get('grade'), ['MI', 'MTs', 'MA']) ? true : false)
                                                 ->required()
                                                 ->columnSpanFull(),
                                         ]),
