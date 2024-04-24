@@ -90,6 +90,10 @@ class Register extends BaseRegister
                                                     if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
                                                         $set('type', 'KSN');
                                                     }
+
+                                                    if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
+                                                        $set('type', 'KSM');
+                                                    }
                                                 }),
                                             Forms\Components\Select::make('province_id')
                                                 ->label('Provinsi')
@@ -124,11 +128,15 @@ class Register extends BaseRegister
                                                         return [
                                                             'KSM' => 'BSC Madrasah (Kompetisi Sains Madrasah)',
                                                         ];
-                                                    } else {
+                                                    } 
+
+                                                    if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
                                                         return [
                                                             'KSN' => 'BSC Umum (Kompetisi Sains Nasional)',
                                                         ];
                                                     }
+
+                                                    return [];
                                                 })
                                                 ->selectablePlaceholder(false)
                                                 ->required()
