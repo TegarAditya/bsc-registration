@@ -19,7 +19,7 @@ return new class extends Migration
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->string('phone_number')->unique();
+            $table->string('phone_number')->nullable();
             $table->string('companion_phone_number')->nullable();
             $table->string('school')->nullable();
             $table->string('grade')->nullable();
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->foreignIdFor(Village::class)->constrained()->cascadeOnDelete()->nullable();
             $table->string('postal_code')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
