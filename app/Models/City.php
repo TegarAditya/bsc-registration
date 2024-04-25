@@ -49,7 +49,7 @@ class City extends Model
      */
     public function users()
     {
-        return $this->hasManyThrough(UserDetail::class, User::class);
+        return $this->hasManyThrough(User::class, UserDetail::class);
     }
 
     /**

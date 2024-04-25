@@ -25,6 +25,7 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
+        'phone_number',
         'password',
     ];
 
@@ -84,5 +85,12 @@ class User extends Authenticatable implements FilamentUser
         }
 
         return true;
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            $user->assignRole('participant');
+        });
     }
 }

@@ -14,7 +14,9 @@ class ParticipantTypeChart extends ChartWidget
 
     protected function getData(): array
     {
-        $userDetails = UserDetail::all();
+        $userDetails = UserDetail::whereHas('user', function ($query) {
+            $query->whereNull('deleted_at');
+        })->get();
 
         $groupedData = $userDetails->groupBy('type')->map(fn ($userDetail) => $userDetail->count());
 

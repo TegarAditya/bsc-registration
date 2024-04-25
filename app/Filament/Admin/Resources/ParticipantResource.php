@@ -5,13 +5,11 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\ParticipantResource\Pages;
 use App\Filament\Admin\Resources\ParticipantResource\RelationManagers;
 use App\Models\City;
-use App\Models\Participant;
 use App\Models\Province;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
@@ -22,6 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
+use Notification;
 use stdClass;
 
 class ParticipantResource extends Resource
@@ -54,6 +53,13 @@ class ParticipantResource extends Resource
                             ->email()
                             ->required()
                             ->columnSpanFull(),
+                        Forms\Components\TextInput::make('phone_number')
+                            ->label('Nomor telepon')
+                            ->helperText('Nomor telepon pribadi yang dapat dihubungi')
+                            ->tel()
+                            ->unique(ignoreRecord: true)
+                            ->required()
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('password')
                             ->label('Password')
                             ->password()
@@ -69,12 +75,8 @@ class ParticipantResource extends Resource
                             ->hiddenLabel()
                             ->relationship('userDetail')
                             ->schema([
-                                Forms\Components\TextInput::make('phone_number')
-                                    ->label('Nomor telepon')
-                                    ->helperText('Nomor telepon pribadi yang dapat dihubungi')
-                                    ->tel()
-                                    ->required(fn ($get) => $get('../email') == null)
-                                    ->columnSpanFull(),
+                                Forms\Components\Hidden::make('phone_number')
+                                    ->formatStateUsing(fn ($get) => $get('../phone_number')),
                                 Forms\Components\TextInput::make('companion_phone_number')
                                     ->label('Nomor telepon pendamping')
                                     ->helperText('Nomor telepon pendamping atau guru yang dapat dihubungi')
@@ -100,6 +102,10 @@ class ParticipantResource extends Resource
 
                                         if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
                                             $set('type', 'KSN');
+                                        }
+
+                                        if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
+                                            $set('type', 'KSM');
                                         }
                                     }),
                                 Forms\Components\Select::make('province_id')
@@ -137,13 +143,13 @@ class ParticipantResource extends Resource
 
                                         if ($grade === 'MI' || $grade === 'MTs' || $grade === 'MA') {
                                             return [
-                                                'KSN' => 'BSC Umum (KSN)',
                                                 'KSM' => 'BSC Madrasah (KSM)',
                                             ];
                                         }
 
                                         return [];
                                     })
+                                    ->selectablePlaceholder(false)
                                     ->required()
                                     ->columnSpanFull(),
                             ]),
@@ -180,7 +186,13 @@ class ParticipantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->query(fn () => parent::getEloquentQuery()->whereHas('userDetail')->orWhereHas('roles', fn (Builder $query) => $query->where('name', 'participant')))
+            ->query(function () {
+                return parent::getEloquentQuery()
+                    ->whereHas('roles', function ($query) {
+                        $query->where('name', 'participant');
+                    })
+                    ->whereHas('userDetail');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('number')
                     ->label('No.')
@@ -193,7 +205,7 @@ class ParticipantResource extends Resource
                     ->label('Email')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('userDetail.phone_number')
+                Tables\Columns\TextColumn::make('phone_number')
                     ->label('Nomor Telepon')
                     ->searchable()
                     ->sortable(),
@@ -221,14 +233,17 @@ class ParticipantResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\RestoreAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
@@ -248,5 +263,13 @@ class ParticipantResource extends Resource
             'create' => Pages\CreateParticipant::route('/create'),
             'edit' => Pages\EditParticipant::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

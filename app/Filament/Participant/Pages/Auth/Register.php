@@ -13,8 +13,6 @@ use Filament\Forms\Components\Wizard;
 use Filament\Forms;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Group;
-use Filament\Forms\FormsComponent;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
@@ -45,6 +43,7 @@ class Register extends BaseRegister
                                 ->schema([
                                     $this->getNameFormComponent(),
                                     $this->getEmailFormComponent(),
+                                    $this->getPhoneNumberFormComponent(),
                                     $this->getPasswordFormComponent(),
                                     $this->getPasswordConfirmationFormComponent(),
                                     $this->getCredentialAdviceComponent(),
@@ -56,12 +55,7 @@ class Register extends BaseRegister
                                         ->hiddenLabel()
                                         ->relationship(name: 'userDetail')
                                         ->schema([
-                                            Forms\Components\TextInput::make('phone_number')
-                                                ->label('Nomor telepon')
-                                                ->helperText('Nomor telepon pribadi yang dapat dihubungi. Usahakan tidak sama antar peserta.')
-                                                ->tel()
-                                                ->required(fn ($get) => $get('../email') == null)
-                                                ->columnSpanFull(),
+                                            Forms\Components\Hidden::make('phone_number'),
                                             Forms\Components\TextInput::make('companion_phone_number')
                                                 ->label('Nomor telepon pendamping')
                                                 ->helperText('Nomor telepon pendamping atau guru yang dapat dihubungi')
@@ -128,7 +122,7 @@ class Register extends BaseRegister
                                                         return [
                                                             'KSM' => 'BSC Madrasah (Kompetisi Sains Madrasah)',
                                                         ];
-                                                    } 
+                                                    }
 
                                                     if ($grade === 'SD' || $grade === 'SMP' || $grade === 'SMA') {
                                                         return [
@@ -176,6 +170,18 @@ class Register extends BaseRegister
                     ->model(User::class),
             ),
         ];
+    }
+
+    protected function getPhoneNumberFormComponent(): Component
+    {
+        return Forms\Components\TextInput::make('phone_number')
+            ->label('Nomor telepon')
+            ->helperText('Gunakan nomor telepon yang aktif di WhatsApp')
+            ->tel()
+            ->required()
+            ->live()
+            ->maxLength(255)
+            ->unique($this->getUserModel());
     }
 
     protected function getEmailFormComponent(): Component

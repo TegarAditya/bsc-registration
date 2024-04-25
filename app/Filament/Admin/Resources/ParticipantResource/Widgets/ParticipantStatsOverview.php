@@ -14,8 +14,8 @@ class ParticipantStatsOverview extends BaseWidget
     {
         return [
             Stat::make('Total Pendaftar', fn() => User::whereHas('roles', fn($query) => $query->where('name', 'participant'))->orWhereHas('userDetail')->count()),
-            Stat::make('Persebaran Kabupaten/Kota', City::whereHas('userDetails')->count()),
-            Stat::make('Persebaran Provinsi', Province::whereHas('userDetails')->count()),
+            Stat::make('Persebaran Kabupaten/Kota', City::whereHas('userDetails', fn ($query) => $query->whereHas('user'))->count()),
+            Stat::make('Persebaran Provinsi', Province::whereHas('userDetails', fn ($query) => $query->whereHas('user'))->count()),
         ];
     }
 }
