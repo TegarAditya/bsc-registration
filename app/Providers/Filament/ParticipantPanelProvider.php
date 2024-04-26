@@ -32,7 +32,6 @@ class ParticipantPanelProvider extends PanelProvider
             ->path('')
             ->login()
             ->registration(Register::class)
-            ->profile(isSimple: false)
             ->passwordReset()
             ->emailVerification()
             ->topNavigation()

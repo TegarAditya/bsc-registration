@@ -11,6 +11,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms;
+use Filament\Forms\FormsComponent;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -63,14 +64,32 @@ class EditUserDetail extends Page implements HasForms
                             ->autocomplete(false)
                             ->required()
                             ->columnSpanFull(),
-                        Forms\Components\TextInput::make('password')
-                            ->label('Password')
-                            ->password()
-                            ->autocomplete(false)
-                            ->revealable(filament()->arePasswordsRevealable())
-                            ->rule(Password::default())
-                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                        Forms\Components\TextInput::make('phone_number')
+                            ->label('Nomor telepon')
+                            ->helperText('Nomor telepon pribadi yang dapat dihubungi')
+                            ->tel()
+                            ->numeric()
+                            ->unique(ignoreRecord: true)
+                            ->required()
                             ->columnSpanFull(),
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\Checkbox::make('change_password')
+                                    ->label('Ubah Password')
+                                    ->columnSpanFull()
+                                    ->live()
+                                    ->dehydrated(false),
+                                Forms\Components\TextInput::make('password')
+                                    ->label('Password')
+                                    ->password()
+                                    ->autocomplete(false)
+                                    ->revealable(filament()->arePasswordsRevealable())
+                                    ->hidden(fn (Get $get) => !$get('change_password'))
+                                    ->rule(Password::default())
+                                    ->required()
+                                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                                    ->columnSpanFull(),
+                            ]),
                     ]),
                 Forms\Components\Section::make('Data Diri')
                     ->icon('heroicon-o-user-circle')
@@ -79,12 +98,6 @@ class EditUserDetail extends Page implements HasForms
                             ->hiddenLabel()
                             ->relationship('userDetail')
                             ->schema([
-                                Forms\Components\TextInput::make('phone_number')
-                                    ->label('Nomor telepon')
-                                    ->helperText('Nomor telepon pribadi yang dapat dihubungi')
-                                    ->tel()
-                                    ->required(fn ($get) => $get('../email') == null)
-                                    ->columnSpanFull(),
                                 Forms\Components\TextInput::make('companion_phone_number')
                                     ->label('Nomor telepon pendamping')
                                     ->helperText('Nomor telepon pendamping atau guru yang dapat dihubungi')
