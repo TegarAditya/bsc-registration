@@ -67,6 +67,7 @@ class UserResource extends Resource
             TextInput::make('password')
                 ->label(trans('filament-users::user.resource.password'))
                 ->password()
+                ->hidden()
                 ->maxLength(255)
                 ->dehydrateStateUsing(static function ($state) use ($form) {
                     return !empty($state)
