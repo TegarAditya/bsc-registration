@@ -253,8 +253,8 @@ class ParticipantResource extends Resource
                     ->label('Export Peserta')
                     ->exporter(ParticipantExporter::class)
                     ->formats([
-                        ExportFormat::Xlsx,
                         ExportFormat::Csv,
+                        ExportFormat::Xlsx,
                     ]),
             ])
             ->defaultSort('created_at', 'desc');
