@@ -246,13 +246,6 @@ class ParticipantResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                    Tables\Actions\ExportAction::make()
-                        ->label('Export Peserta')
-                        ->exporter(ParticipantExporter::class)
-                        ->formats([
-                            ExportFormat::Xlsx,
-                            ExportFormat::Csv,
-                        ]),
                 ]),
             ])
             ->headerActions([
