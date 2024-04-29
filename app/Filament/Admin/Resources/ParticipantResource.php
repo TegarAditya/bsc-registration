@@ -4,10 +4,12 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ParticipantResource\Pages;
 use App\Filament\Admin\Resources\ParticipantResource\RelationManagers;
+use App\Filament\Exports\ParticipantExporter;
 use App\Models\City;
 use App\Models\Province;
 use App\Models\User;
 use Filament\Actions\Action;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Form;
@@ -244,7 +246,23 @@ class ParticipantResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\ExportAction::make()
+                        ->label('Export Peserta')
+                        ->exporter(ParticipantExporter::class)
+                        ->formats([
+                            ExportFormat::Xlsx,
+                            ExportFormat::Csv,
+                        ]),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->label('Export Peserta')
+                    ->exporter(ParticipantExporter::class)
+                    ->formats([
+                        ExportFormat::Xlsx,
+                        ExportFormat::Csv,
+                    ]),
             ])
             ->defaultSort('created_at', 'desc');
     }
