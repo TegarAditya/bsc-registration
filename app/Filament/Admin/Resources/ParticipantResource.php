@@ -213,6 +213,7 @@ class ParticipantResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('userDetail.school')
                     ->label('Sekolah')
+                    ->formatStateUsing(fn ($state) => strtoupper($state))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('userDetail.grade')
