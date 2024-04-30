@@ -47,6 +47,6 @@ class ExamEntryWidget extends Widget
             return 'https://candidate.speedexam.net/openquiz.aspx?quiz=DF8960215A4B452F8E17505F0D417703';
         }
 
-        return url('/');
+        return 'https://candidate.speedexam.net/openquiz.aspx?quiz=DF8960215A4B452F8E17505F0D417703';
     }
 }
