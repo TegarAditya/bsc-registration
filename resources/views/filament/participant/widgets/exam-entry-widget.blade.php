@@ -17,8 +17,8 @@
             @if ($this->getUserStatus())
                 <x-filament::button icon="heroicon-o-bolt" href="{{ $this->getExamLink() }}"
                     color="primary" tag="a">
-                    <span id="countdown" class="font-mono">0d 0h 0m 0s</span>
-                    <script>
+                    <span id="countdown" class="font-mono">Mulai Simulasi</span>
+                    {{-- <script>
                         var countDownDate = new Date({!! $this->getSchedule() !!}).getTime();
     
                         var x = setInterval(function() {
@@ -41,7 +41,7 @@
                                 document.getElementById("countdown").classList.remove("font-mono");
                             }
                         }, 1000);
-                    </script>
+                    </script> --}}
                 </x-filament::button>
             @else
                 <x-filament::button icon="heroicon-o-arrow-right" href="{{ $this->getProfileLink() }}" tag="a">
