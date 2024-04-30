@@ -44,7 +44,7 @@ class ExamEntryWidget extends Widget
 
         if ($currentDateTime == "Apr 30, 2024 09:00:00") {
             $currentDateTime = date('M d, Y H:i:s');
-            return url('https://candidate.speedexam.net/openquiz.aspx?quiz=DF8960215A4B452F8E17505F0D417703');
+            return 'https://candidate.speedexam.net/openquiz.aspx?quiz=DF8960215A4B452F8E17505F0D417703';
         }
 
         return url('/');
