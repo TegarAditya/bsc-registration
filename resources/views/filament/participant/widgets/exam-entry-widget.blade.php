@@ -17,7 +17,7 @@
             @if ($this->getUserStatus())
                 <x-filament::button icon="heroicon-o-bolt" href="{{ $this->getExamLink() }}"
                     color="primary" tag="a">
-                    <span id="countdown" class="font-mono">Mulai Simulasi</span>
+                    <span id="countdown" class="font-mono" disabled>Kuota Penuh</span>
                     {{-- <script>
                         var countDownDate = new Date({!! $this->getSchedule() !!}).getTime();
     
