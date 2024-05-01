@@ -45,6 +45,6 @@ class ExamEntryWidget extends Widget
 
         $userEmail = Auth::user()->email;
 
-        return 'https://bsc-817.pages.dev/?email=' . $userEmail . '&datetime=' . $currentDateTime;
+        return 'https://cbtsd.bupin.id/login.php?8100';
     }
 }
