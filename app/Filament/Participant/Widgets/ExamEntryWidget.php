@@ -46,7 +46,7 @@ class ExamEntryWidget extends Widget
 
         $passkey = env('EXAM_PASSKEY', '123456');
 
-        $link = 'https:cbt-bsc.bupin.id/ceklogin.php?username=' . $userEmail . '&password=' . $passkey;
+        $link = 'https://cbt-bsc.bupin.id/ceklogin.php?username=' . $userEmail . '&password=' . $passkey;
 
         return $link;
     }
