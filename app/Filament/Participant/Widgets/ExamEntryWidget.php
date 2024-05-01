@@ -3,6 +3,7 @@
 namespace App\Filament\Participant\Widgets;
 
 use App\Models\User;
+use Auth;
 use Filament\Widgets\Widget;
 
 class ExamEntryWidget extends Widget
@@ -42,11 +43,8 @@ class ExamEntryWidget extends Widget
 
         $currentDateTime = date('M d, Y H:i:s');
 
-        if ($currentDateTime == "Apr 30, 2024 09:00:00") {
-            $currentDateTime = date('M d, Y H:i:s');
-            return 'https://candidate.speedexam.net/openquiz.aspx?quiz=DF8960215A4B452F8E17505F0D417703';
-        }
+        $userEmail = Auth::user()->email;
 
-        return 'https://candidate.speedexam.net/openquiz.aspx?quiz=DF8960215A4B452F8E17505F0D417703';
+        return 'https://bsc-817.pages.dev/?email=' . $userEmail . '&datetime=' . $currentDateTime;
     }
 }
