@@ -17,31 +17,7 @@
             @if ($this->getUserStatus())
                 <x-filament::button icon="heroicon-o-bolt" href="{{ $this->getExamLink() }}"
                     color="primary" tag="a">
-                    <span id="countdown" class="font-mono" disabled>Kuota Penuh</span>
-                    {{-- <script>
-                        var countDownDate = new Date({!! $this->getSchedule() !!}).getTime();
-    
-                        var x = setInterval(function() {
-    
-                            var now = new Date().getTime();
-    
-                            var distance = countDownDate - now;
-    
-                            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-                            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " +
-                                minutes + "m " + seconds + "s ";
-    
-                            if (distance < 0) {
-                                clearInterval(x);
-                                document.getElementById("countdown").innerHTML = "Mulai Simulasi";
-                                document.getElementById("countdown").classList.remove("font-mono");
-                            }
-                        }, 1000);
-                    </script> --}}
+                    <span id="countdown" class="font-mono" disabled>Mulai Simulasi</span>
                 </x-filament::button>
             @else
                 <x-filament::button icon="heroicon-o-arrow-right" href="{{ $this->getProfileLink() }}" tag="a">
