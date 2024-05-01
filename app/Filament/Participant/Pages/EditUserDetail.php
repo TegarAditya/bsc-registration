@@ -170,6 +170,7 @@ class EditUserDetail extends Page implements HasForms
                                     })
                                     ->selectablePlaceholder(fn ($get) => in_array($get('grade'), ['MI', 'MTs', 'MA']) ? true : false)
                                     ->required()
+                                    ->disabled()
                                     ->columnSpanFull(),
                             ]),
                     ]),
