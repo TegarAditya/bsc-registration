@@ -31,7 +31,7 @@ class ParticipantPanelProvider extends PanelProvider
             ->id('participant')
             ->path('')
             ->login()
-            ->registration(Register::class)
+            // ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
             ->topNavigation()

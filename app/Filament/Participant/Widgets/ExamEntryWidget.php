@@ -40,11 +40,10 @@ class ExamEntryWidget extends Widget
 
     public function getExamLink(): string
     {
-
         $currentDateTime = date('M d, Y H:i:s');
 
         $userEmail = Auth::user()->email;
 
-        return 'https://cbtsd.bupin.id/login.php?8100';
+        return '#';
     }
 }
