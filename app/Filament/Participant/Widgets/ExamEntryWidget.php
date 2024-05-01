@@ -44,6 +44,10 @@ class ExamEntryWidget extends Widget
 
         $userEmail = Auth::user()->email;
 
-        return '#';
+        $passkey = env('EXAM_PASSKEY', '123456');
+
+        $link = 'https:cbt-bsc.bupin.id/ceklogin.php?username=' . $userEmail . '&password=' . $passkey;
+
+        return $link;
     }
 }
