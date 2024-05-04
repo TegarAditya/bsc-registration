@@ -4,14 +4,12 @@ namespace App\Filament\Participant\Pages;
 
 use App\Models\City;
 use App\Models\Province;
-use App\Models\User;
 use Auth;
 use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms;
-use Filament\Forms\FormsComponent;
 use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -61,6 +59,7 @@ class EditUserDetail extends Page implements HasForms
                             ->label('Email')
                             ->unique(ignoreRecord: true)
                             ->email()
+                            ->disabled()
                             ->autocomplete(false)
                             ->required()
                             ->columnSpanFull(),
@@ -138,7 +137,8 @@ class EditUserDetail extends Page implements HasForms
                                 Forms\Components\Textarea::make('address')
                                     ->label('Alamat (opsional)')
                                     ->columnSpanFull(),
-                            ]),
+                            ])
+                            ->disabled(),
                     ]),
                 Forms\Components\Section::make('Data Lomba')
                     ->icon('heroicon-o-academic-cap')
