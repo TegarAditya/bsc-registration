@@ -10,6 +10,8 @@ class ExamEntryWidget extends Widget
 {
     protected static string $view = 'filament.participant.widgets.exam-entry-widget';
 
+    protected static bool $isDiscovered = false;
+
     protected static bool $isLazy = false;
 
     public function getColumnSpan(): int|string|array
