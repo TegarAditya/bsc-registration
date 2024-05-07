@@ -21,3 +21,6 @@ yarn-error.log
 /caddy
 frankenphp
 frankenphp-worker.php
+
+/storage/fonts/*
+!/storage/fonts/.gitkeep
