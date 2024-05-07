@@ -56,19 +56,19 @@ class DownloadCertificateWidget extends Widget
     {
         $level = Auth::user()->userDetail->grade;
 
-        if (in_array($level, ['SD', 'MI'])) {
-            return 'LEVEL 1';
+        switch ($level) {
+            case 'SD':
+            case 'MI':
+                return 'LEVEL 1';
+            case 'SMP':
+            case 'MTs':
+                return 'LEVEL 2';
+            case 'SMA':
+            case 'MA':
+                return 'LEVEL 3';
+            default:
+                return '';
         }
-
-        if (in_array($level, ['SMP', 'MTs'])) {
-            return 'LEVEL 2';
-        }
-
-        if (in_array($level, ['SMA', 'MA'])) {
-            return 'LEVEL 3';
-        }
-
-        return '';
     }
 
     public function getCertificateImage(): string
