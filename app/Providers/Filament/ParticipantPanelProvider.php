@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use App\Filament\Participant\Pages\Auth\Register;
 use App\Filament\Participant\Widgets\CountdownWidget;
+use App\Filament\Participant\Widgets\DownloadCertificateWidget;
 use App\Filament\Participant\Widgets\ParticipantWidget;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
@@ -33,7 +34,6 @@ class ParticipantPanelProvider extends PanelProvider
             ->login()
             // ->registration(Register::class)
             ->passwordReset()
-            ->emailVerification()
             ->topNavigation()
             ->defaultThemeMode(ThemeMode::Light)
             ->brandLogo(asset('assets/images/logo.png'))
@@ -43,6 +43,7 @@ class ParticipantPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Cyan,
             ])
+            ->viteTheme('resources/css/filament/participant/theme.css')
             ->discoverResources(in: app_path('Filament/Participant/Resources'), for: 'App\\Filament\\Participant\\Resources')
             ->discoverPages(in: app_path('Filament/Participant/Pages'), for: 'App\\Filament\\Participant\\Pages')
             ->pages([
@@ -52,6 +53,8 @@ class ParticipantPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
+                ParticipantWidget::class,
+                DownloadCertificateWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
