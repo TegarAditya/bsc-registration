@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\AvatarProviders\BoringAvatarsProvider;
 use App\Filament\Participant\Pages\Auth\Register;
 use App\Filament\Participant\Widgets\CountdownWidget;
+use App\Filament\Participant\Widgets\DownloadAnswerExplanationWidget;
 use App\Filament\Participant\Widgets\DownloadCertificateWidget;
 use App\Filament\Participant\Widgets\ParticipantWidget;
 use Filament\Enums\ThemeMode;
@@ -55,6 +56,7 @@ class ParticipantPanelProvider extends PanelProvider
                 // Widgets\FilamentInfoWidget::class,
                 ParticipantWidget::class,
                 DownloadCertificateWidget::class,
+                DownloadAnswerExplanationWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
