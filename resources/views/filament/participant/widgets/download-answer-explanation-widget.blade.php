@@ -15,7 +15,7 @@
         <br class="my-2">
         <div>
             @if ($this->getUserStatus())
-            <div class="flex space-y-1 flex-wrap md:flex-none md:space-y-0 space-x-1">
+            <div class="flex space-y-1 flex-wrap md:flex-none md:space-y-0 md:space-x-1">
                 <x-filament::button icon="heroicon-o-light-bulb" href="{{ $this->getAnswerExplanationLink() }}" tag="a">
                     <span>Lihat Pembahasan</span>
                 </x-filament::button>
