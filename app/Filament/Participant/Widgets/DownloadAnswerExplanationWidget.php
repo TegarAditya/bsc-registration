@@ -78,6 +78,11 @@ class DownloadAnswerExplanationWidget extends Widget
         }
     }
 
+    public function getScoreLink(): string
+    {
+        return 'https://docs.google.com/spreadsheets/d/1bAh-O5-7lRPtRdvvWssCk0wqtP7d1G9I6NNanKOE05s/edit?usp=sharing';
+    }
+
     public function checkLink(): void
     {
         dd($this->getAnswerExplanationLink());

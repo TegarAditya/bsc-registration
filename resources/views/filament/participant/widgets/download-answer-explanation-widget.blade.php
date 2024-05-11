@@ -15,9 +15,14 @@
         <br class="my-2">
         <div>
             @if ($this->getUserStatus())
+            <div class="flex space-y-1 flex-wrap md:flex-none md:space-y-0 space-x-1">
                 <x-filament::button icon="heroicon-o-light-bulb" href="{{ $this->getAnswerExplanationLink() }}" tag="a">
                     <span>Lihat Pembahasan</span>
                 </x-filament::button>
+                <x-filament::button icon="heroicon-o-bolt" href="{{ $this->getScoreLink() }}" tag="a">
+                    <span>Lihat Nilai</span>
+                </x-filament::button>
+            </div>
             @else
                 <x-filament::button icon="heroicon-o-arrow-right" href="/edit-user-detail" tag="a">
                     Lengkapi Data Diri
