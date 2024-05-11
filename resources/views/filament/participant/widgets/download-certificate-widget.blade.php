@@ -18,6 +18,10 @@
                 <x-filament::button icon="heroicon-o-arrow-down-tray" color="primary" wire:click="downloadCertificate">
                     <span>Download Sertifikat</span>
                 </x-filament::button>
+            @else
+                <x-filament::button icon="heroicon-o-arrow-right" href="/edit-user-detail" tag="a">
+                    Lengkapi Data Diri
+                </x-filament::button>
             @endif
         </div>
     </x-filament::section>

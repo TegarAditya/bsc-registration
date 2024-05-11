@@ -20,6 +20,12 @@ class DownloadAnswerExplanationWidget extends Widget
 
     public function getUserStatus(): bool
     {
+        $data = Auth::user()->userDetail;
+
+        if ($data == null) {
+            return false;
+        }
+
         return true;
     }
 
