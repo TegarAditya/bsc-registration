@@ -8,6 +8,7 @@ use App\Filament\Exports\ParticipantExporter;
 use App\Models\City;
 use App\Models\Province;
 use App\Models\User;
+use Auth;
 use Filament\Actions\Action;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
 use Notification;
+use Pdf;
 use stdClass;
 
 class ParticipantResource extends Resource
@@ -239,8 +241,60 @@ class ParticipantResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\Action::make('pdf')
+                    ->label('Sertifikat')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->action(function (User $record) {
+
+                        function encodeImage(string $imagePath): string
+                        {
+                            return 'data:image/jpeg;base64,' . base64_encode(file_get_contents(public_path($imagePath)));
+                        }
+
+                        $name = $record->name;
+                        $category = $record->userDetail->type;
+                        $level = $record->userDetail->grade;
+                        $image = encodeImage('assets/images/certificates-ksn.jpg');
+
+                        if ($category === 'KSN') {
+                            $category = 'Umum';
+                        } elseif ($category === 'KSM') {
+                            $category = 'Madrasah';
+                        } else {
+                            $category = '';
+                        }
+
+                        if ($level === 'SD' || $level === 'MI') {
+                            $level = 'LEVEL 1';
+                        } elseif ($level === 'SMP' || $level === 'MTs') {
+                            $level = 'LEVEL 2';
+                        } elseif ($level === 'SMA' || $level === 'MA') {
+                            $level = 'LEVEL 3';
+                        } else {
+                            $level = '';
+                        }
+
+                        if ($category === 'Umum') {
+                            $image = encodeImage('assets/images/certificates-ksn.jpg');
+                        } else {
+                            $image = encodeImage('assets/images/certificates-ksm.jpg');
+                        }
+
+                        return response()->streamDownload(function () use ($name, $category, $level, $image) {
+                            echo Pdf::loadView('pdf.certificate', [
+                                'name' => $name,
+                                'certificatePath' => $image,
+                                'category' => $category,
+                                'level' => $level,
+                                'documentTitle' => 'Sertifikat Peserta BSC 2024',
+                            ])
+                                ->setOption(['defaultFont' => 'sans-serif', 'enable_font_subsetting' => true])
+                                ->setPaper('a4', 'landscape')
+                                ->stream();
+                        }, $name . ' - BSC 2024.pdf');
+                    }),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\RestoreAction::make()
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
