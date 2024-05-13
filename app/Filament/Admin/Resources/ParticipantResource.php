@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Models\Province;
 use App\Models\User;
 use Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Filament\Actions\Action;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
@@ -18,13 +19,14 @@ use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
 use Notification;
-use Pdf;
 use stdClass;
 
 class ParticipantResource extends Resource
@@ -38,6 +40,21 @@ class ParticipantResource extends Resource
     protected static ?string $navigationLabel = 'Daftar Peserta';
 
     protected static ?string $modelLabel = 'Peserta';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email', 'phone_number'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Email' => $record->email,
+            'Nomor Telepon' => $record->phone_number,
+        ];
+    }
 
     public static function form(Form $form): Form
     {
