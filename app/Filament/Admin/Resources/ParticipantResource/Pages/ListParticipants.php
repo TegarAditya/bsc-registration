@@ -24,8 +24,8 @@ class ListParticipants extends ListRecords
     {
         return [
             ParticipantStatsOverview::make(),
-            ParticipantRegistrationChart::make(),
-            ParticipantTypeChart::make(),
+            // ParticipantRegistrationChart::make(),
+            // ParticipantTypeChart::make(),
         ];
     }
 }
